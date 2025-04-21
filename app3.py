@@ -1,7 +1,15 @@
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 from streamlit_option_menu import option_menu
+from google.oauth2.service_account import Credentials
+import gspread
+
+import sys
+#st.write("Python executable in use:", sys.executable)
+#st.write("sys.path:", sys.path)
+
 
 # Configuración de la página
 st.set_page_config(page_title="Mettatec Dashboard", page_icon=":bar_chart:", layout="wide")
@@ -18,6 +26,7 @@ def load_data(uploaded_file):
         header=1, # La fila 2 en Excel
     )
 
+
 st.title("Carga de archivo Excel")
 
 # Widget para subir archivos de tipo Excel
@@ -30,8 +39,30 @@ if uploaded_file is not None:
 else:
     st.info("Por favor, sube un archivo Excel para ver los datos.")
 
-print("DataFrame cargado:")
-print(df.columns.tolist())
+scope = [
+    "https://www.googleapis.com/auth/spreadsheets", 
+    "https://www.googleapis.com/auth/drive"
+]
+
+creds = Credentials.from_service_account_file("regal-muse-452714-a6-36c96a9e9e1e.json", scopes=scope)
+client = gspread.authorize(creds)
+
+try:
+    # Listar todas las hojas de cálculo accesibles
+    spreadsheets = client.openall()
+    print("Hojas de cálculo disponibles:")
+    for sheet in spreadsheets:
+        print(" - " + sheet.title)
+except Exception as e:
+    print("Error al acceder a las hojas de cálculo:", e)
+
+
+# Ejemplo para abrir una hoja de cálculo
+#sheet = client.open("TRAZABILIDAD_SOPORTE").worksheet("data")
+#data = sheet.get_all_records()
+
+#print("DataFrame cargado:")
+#print(df.columns.tolist())
 
 # Sidebar - Menu principal 
 with st.sidebar:
