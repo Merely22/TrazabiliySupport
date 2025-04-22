@@ -44,12 +44,6 @@ df = load_data()
 # Mostrar tabla
 st.title("Dashboard Trazabilidad Soporte")
 
-if not df.empty:
-    st.write("Datos cargados:")
-    st.dataframe(df)
-else:
-    st.info("No se pudieron cargar datos desde Google Sheets.")
-
 # Sidebar - Menú principal
 with st.sidebar:
     selected = option_menu(
@@ -79,9 +73,9 @@ if selected == "Consultas":
 if selected == "Reportes":
     st.header("Reportes")
 
-    df["FECHA INGRESO"] = pd.to_datetime(df["FECHA INGRESO"],  errors='coerce', dayfirst=True) # fecha 
+    df["FECHA INGRESO"] = pd.to_datetime(df["FECHA INGRESO"],  errors='coerce', ) # date 
     df["AÑO"] = df["FECHA INGRESO"].dt.year
-    df["MES"] = df["FECHA INGRESO"].dt.strftime('%B') 
+    df["MES"] = df["FECHA INGRESO"].dt.strftime('%d') ### to be corrected
 
     año_seleccionado = st.selectbox("Seleccione el año:", options=sorted(df["AÑO"].dropna().unique(), reverse=True))
     df_año = df[df["AÑO"] == año_seleccionado]
