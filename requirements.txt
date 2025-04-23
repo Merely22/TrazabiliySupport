@@ -4,3 +4,4 @@ plotly
 google-auth
 google-api-python-client
 streamlit-option-menu
+gspread
