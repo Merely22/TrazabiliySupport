@@ -4,17 +4,19 @@ import plotly.express as px
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from streamlit_option_menu import option_menu
+import streamlit as st
+from google.oauth2.service_account import Credentials
+import gspread
 
 # Configuración de la página
 st.set_page_config(page_title="Mettatec Dashboard", page_icon=":bar_chart:", layout="wide")
 
 # Autenticación con Google Sheets
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-SERVICE_ACCOUNT_FILE = r"C:\Users\Merely\Desktop\APIrest\TrazabiliySupport-1\x5-cloud-410020-f0e9f3a9cbdd.json"
-
-credentials = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE, scopes=SCOPES
+credentials = service_account.Credentials.from_service_account_info(
+    st.secrets, scopes=SCOPES
 )
+
 service = build("sheets", "v4", credentials=credentials)
 
 # ID de la hoja y nombre de la hoja
