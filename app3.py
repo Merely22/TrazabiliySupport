@@ -4,9 +4,9 @@ import plotly.express as px
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from streamlit_option_menu import option_menu
-import streamlit as st
 from google.oauth2.service_account import Credentials
 import gspread
+# pip install google-api-python-client
 
 # Configuración de la página
 st.set_page_config(page_title="Mettatec Dashboard", page_icon=":bar_chart:", layout="wide")
@@ -27,7 +27,7 @@ sheet_name = "data"
 def load_data():
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheet_id,
-        range=f"{sheet_name}!B2:S101"  # Asumiendo que hay encabezado en fila 2 y hasta 100 filas de datos
+        range=f"{sheet_name}!B2:S101"  # Fila 2
     ).execute()
 
     values = result.get("values", [])
