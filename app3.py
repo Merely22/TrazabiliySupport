@@ -75,9 +75,9 @@ if selected == "Consultas":
 if selected == "Reportes":
     st.header("Reportes")
 
-    df["FECHA INGRESO"] = pd.to_datetime(df["FECHA INGRESO"],  errors='coerce', ) # date 
+    df["FECHA INGRESO"] = pd.to_datetime(df["FECHA INGRESO"],  errors='coerce' ) # date 
     df["AÑO"] = df["FECHA INGRESO"].dt.year
-    df["MES"] = df["FECHA INGRESO"].dt.strftime('%d') ### to be corrected
+    df["MES"] = pd.to_datetime(df["FECHA INGRESO"], errors='coerce').dt.strftime('%B')### to be corrected
 
     año_seleccionado = st.selectbox("Seleccione el año:", options=sorted(df["AÑO"].dropna().unique(), reverse=True))
     df_año = df[df["AÑO"] == año_seleccionado]
