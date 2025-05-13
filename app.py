@@ -151,7 +151,7 @@ elif selected == "Etapas":
     # Filtrar datos sin outliers
     df_sin_outliers = df[(df["Tiempo Total"] >= lower_bound) & (df["Tiempo Total"] <= upper_bound)]
 
-    # Mostrar métricas sin outliers
+    # Mostrar metricas sin outliers
     cols = st.columns(4)
     with cols[0]:
         avg_time = df_sin_outliers["Tiempo Total"].mean()
@@ -163,12 +163,12 @@ elif selected == "Etapas":
     with cols[3]:
         st.metric("Mediana", f"{df_sin_outliers['Tiempo Total'].median()} días")
 
-    # Mostrar tabla general (completa o filtrada según quieras)
-    st.subheader("Detalle por Equipo (sin outliers)")
+    # Mostrar tabla general 
+    st.subheader("Detalle por Equipo ")
     st.dataframe(df_sin_outliers[["NOMBRE / RAZÓN SOCIAL", "FECHA INGRESO", "FECHA ENTREGA", "Tiempo Total"]])
 
-    # Mostrar outliers detectados (opcional)
+    # Mostrar outliers detectados
     outliers = df[(df["Tiempo Total"] < lower_bound) | (df["Tiempo Total"] > upper_bound)]
     if not outliers.empty:
-        with st.expander("⚠️ Ver tiempos atípicos detectados"):
+        with st.expander("Identificar tiempos atípicos detectados"):
             st.dataframe(outliers[["NOMBRE / RAZÓN SOCIAL", "FECHA INGRESO", "FECHA ENTREGA", "Tiempo Total"]])
