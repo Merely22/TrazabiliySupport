@@ -136,18 +136,39 @@ elif selected == "Estado del Equipo":
 # ETAPAS
 elif selected == "Etapas":
     st.header("Tiempos entre Etapas")
+
+    # Calcular el tiempo total
     df["Tiempo Total"] = (df["FECHA ENTREGA"] - df["FECHA INGRESO"]).dt.days
 
+    # Calcular el primer y tercer cuartil
+    Q1 = df["Tiempo Total"].quantile(0.25)
+    Q3 = df["Tiempo Total"].quantile(0.75)
+    IQR = Q3 - Q1
+
+    lower_bound = Q1 - 2.9 * IQR
+    upper_bound = Q3 + 2.9 * IQR
+
+    # Filtrar datos sin outliers
+    df_sin_outliers = df[(df["Tiempo Total"] >= lower_bound) & (df["Tiempo Total"] <= upper_bound)]
+
+    # Mostrar métricas sin outliers
     cols = st.columns(4)
     with cols[0]:
-        avg_time = df["Tiempo Total"].mean()
-        st.metric("Promedio", f"{round(avg_time,1)} días" if not pd.isna(avg_time) else "N/A")
+        avg_time = df_sin_outliers["Tiempo Total"].mean()
+        st.metric("Promedio (sin outliers)", f"{round(avg_time,1)} días" if not pd.isna(avg_time) else "N/A")
     with cols[1]:
-        st.metric("Mínimo", f"{df['Tiempo Total'].min()} días")
+        st.metric("Mínimo", f"{df_sin_outliers['Tiempo Total'].min()} días")
     with cols[2]:
-        st.metric("Máximo", f"{df['Tiempo Total'].max()} días")
+        st.metric("Máximo", f"{df_sin_outliers['Tiempo Total'].max()} días")
     with cols[3]:
-        st.metric("Mediana", f"{df['Tiempo Total'].median()} días")
+        st.metric("Mediana", f"{df_sin_outliers['Tiempo Total'].median()} días")
 
-    st.subheader("Detalle por Equipo")
-    st.dataframe(df[["NOMBRE / RAZÓN SOCIAL", "FECHA INGRESO", "FECHA ENTREGA", "Tiempo Total"]])
+    # Mostrar tabla general (completa o filtrada según quieras)
+    st.subheader("Detalle por Equipo (sin outliers)")
+    st.dataframe(df_sin_outliers[["NOMBRE / RAZÓN SOCIAL", "FECHA INGRESO", "FECHA ENTREGA", "Tiempo Total"]])
+
+    # Mostrar outliers detectados (opcional)
+    outliers = df[(df["Tiempo Total"] < lower_bound) | (df["Tiempo Total"] > upper_bound)]
+    if not outliers.empty:
+        with st.expander("⚠️ Ver tiempos atípicos detectados"):
+            st.dataframe(outliers[["NOMBRE / RAZÓN SOCIAL", "FECHA INGRESO", "FECHA ENTREGA", "Tiempo Total"]])
