@@ -76,7 +76,7 @@ if selected == "Inicio":
     equipos_mes = df['MES'].value_counts().sort_index().reset_index()
     equipos_mes.columns = ['MES', 'CANTIDAD']
     fig = px.bar(equipos_mes, x='MES', y='CANTIDAD', title="Equipos ingresados por mes",
-                 labels={'CANTIDAD': 'N° de equipos'}, color_discrete_sequence=['#00CC96'])
+                 labels={'CANTIDAD': 'N° de equipos'}, color_discrete_sequence=["#00AACC"])
     st.plotly_chart(fig, use_container_width=True)
 
       # Mostrar outliers detectados
