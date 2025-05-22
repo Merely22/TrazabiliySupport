@@ -79,6 +79,10 @@ if selected == "Inicio":
                  labels={'CANTIDAD': 'N° de equipos'}, color_discrete_sequence=['#00CC96'])
     st.plotly_chart(fig, use_container_width=True)
 
+      # Mostrar outliers detectados
+
+    with st.expander("Equipos pendientes"):
+        st.dataframe(df[df["ENTREGADO CLIENTE"] != "SI"])
 #========================================================================================
 # CONSULTAS
 elif selected == "Consultas":
@@ -123,7 +127,7 @@ elif selected == "Estado del Equipo":
         labels=['Con diagnóstico', 'Sin diagnóstico'],
         values=[len(con_diag), len(sin_diag)],
         hole=0.5,
-        marker_colors=['#2ca02c', '#d62728'],
+        marker_colors=['#4233ff', '#ff3333'],
         textinfo='percent+value',
         pull=[0.1, 0]
     ))
