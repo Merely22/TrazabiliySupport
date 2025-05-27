@@ -24,7 +24,7 @@ SPREADSHEET_ID = "1n1RzG32GYqTAK8Zm_Iqg3PEdt9U_YG4Nx-YwRCopMm8"
 SHEET_NAME = "data"
 
 @st.cache_data
-def load_data():
+def load_data(ttl=60): # actualiza cada 60 segundos, reactiva pero no sobre carga el app
     result = service.spreadsheets().values().get(
         spreadsheetId=SPREADSHEET_ID,
         range=f"{SHEET_NAME}!B2:AD101"
